@@ -8,7 +8,9 @@ echo "3: Szyfrowanie pojedynczego pliku tekstowego"
 echo "4: Szyfrowanie wielu plików"
 echo "5: Zobacz zawartość pliku"
 echo "6: Usuń wszystkie pliki utworzone przez ten program"
-echo "7: Zakończ "
+echo "7: Odszyfrowanie pojedynczego pliku tekstowego"
+echo "8: Odszyfrowanie wielu plików"
+echo "9: Zakończ "
 }
 function szyfruj
 {
@@ -36,6 +38,10 @@ function usun
 		do 
 		rm "$nplik"
 		done
+	for nplik2 in *.od
+		do 
+		rm "$nplik2"
+		done
 }
 function szyfruj_wiele
 {
@@ -54,10 +60,41 @@ function szyfruj_wiele
 		
 		done
 }
+function odszyfruj
+{
+  echo "Podaj nazwę pliku"
+	read nazwapliku
+	if [ -e "$nazwapliku" ]
+	then
+	{
+	cat "$nazwapliku" | tr 'n-za-mN-ZA-M' 'a-zA-Z' 
+	} > "$nazwapliku.sd"
+	echo "Zaszyfrowano do $nazwapliku.od"
+	else 
+	echo "Brak pliku $nazwapliku"
+	fi
+}
+function odszyfruj_wiele
+{
+	for nazwyplikow in *
+		do
+		echo "Szyfrować plik $nazwyplikow ?[0/1]" 
+		read answer
+		
+		if [ $answer -eq "1" ]
+		then
+		{
+		cat "$nazwyplikow" | tr 'n-za-mN-ZA-M' 'a-zA-Z' 
+		} > "$nazwyplikow.od"
+		
+		fi
+		
+		done
+}
 opcje
 d=10;
 
-until [ "$d" -eq 7 ]; do 
+until [ "$d" -eq 9 ]; do 
 read d
 	case "$d" in
 	
@@ -67,7 +104,9 @@ read d
 	"4") szyfruj_wiele ;;
 	"5") wyswietl ;;
 	"6") usun ;;
-	"7") echo "Kończę skrypt..." ;;
+	"7") odszyfruj ;;
+	"8") odszyfruj_wiele ;;	
+	"9") echo "Kończę skrypt..." ;;
       *) echo "Nic nie wybrałeś" ;;
     
 	esac
